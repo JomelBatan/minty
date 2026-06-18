@@ -1,98 +1,107 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import { Transaction } from "@/types";
+import { StatusBar } from "expo-status-bar";
+import { FlatList, SafeAreaView, Text, View } from "react-native";
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+const transactions: Transaction[] = [
+  {
+    id: "1",
+    title: "Grocery Store",
+    category: "Food",
+    amount: -1200,
+    type: "expense",
+    date: "Dec 28",
+  },
+  {
+    id: "2",
+    title: "Salary",
+    category: "Income",
+    amount: 25000,
+    type: "income",
+    date: "Dec 27",
+  },
+  {
+    id: "3",
+    title: "Electric Bill",
+    category: "Utilities",
+    amount: -1800,
+    type: "expense",
+    date: "Dec 26",
+  },
+];
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const balance = 22000;
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  const renderItem = ({ item }: { item: Transaction }) => {
+    const isIncome = item.type === "income";
+
+    return (
+      <View className="flex-row items-center justify-between rounded-2xl bg-white p-4 mb-3 shadow-sm">
+        <View>
+          <Text className="text-base font-semibold text-gray-900">
+            {item.title}
+          </Text>
+          <Text className="text-sm text-gray-500">
+            {item.category} • {item.date}
+          </Text>
+        </View>
+
+        <Text
+          className={`text-base font-semibold ${
+            isIncome ? "text-green-600" : "text-red-500"
+          }`}
+        >
+          {isIncome ? "+" : "-"}₱{Math.abs(item.amount).toLocaleString()}
+        </Text>
+      </View>
+    );
+  };
+
+  return (
+    <SafeAreaView className="flex-1 bg-gray-100">
+      <StatusBar style="dark" />
+
+      {/* Header */}
+      <View className="px-5 pt-4 pb-6">
+        <Text className="text-sm text-gray-500">Current Balance</Text>
+        <Text className="text-3xl font-bold text-gray-900 mt-1">
+          ₱{balance.toLocaleString()}
+        </Text>
+      </View>
+
+      {/* Balance Card */}
+      <View className="mx-5 mb-6 rounded-3xl bg-[#1E293B] p-6">
+        <Text className="text-gray-300 text-sm">Available Balance</Text>
+        <Text className="text-white text-3xl font-bold mt-2">
+          ₱{balance.toLocaleString()}
+        </Text>
+
+        <View className="flex-row justify-between mt-6">
+          <View>
+            <Text className="text-gray-400 text-xs">Income</Text>
+            <Text className="text-green-400 font-semibold mt-1">₱25,000</Text>
+          </View>
+
+          <View>
+            <Text className="text-gray-400 text-xs">Expenses</Text>
+            <Text className="text-red-400 font-semibold mt-1">₱3,000</Text>
+          </View>
+        </View>
+      </View>
+
+      {/* Transactions */}
+      <View className="flex-1 px-5">
+        <Text className="text-lg font-semibold text-gray-900 mb-4">
+          Recent Transactions
+        </Text>
+
+        <FlatList
+          data={transactions}
+          keyExtractor={(item) => item.id}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
-
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});

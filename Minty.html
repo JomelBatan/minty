@@ -1,0 +1,383 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Local‑First Expense Tracker — Concept Reference</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Poppins:wght@400;600&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --deep-blue: #1e3a8a;
+        --mint-green: #34d399;
+        --warm-neutral: #f8fafc;
+        --muted: #6b7280;
+        --glass: rgba(255, 255, 255, 0.6);
+        font-family:
+          Inter,
+          Poppins,
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          Roboto,
+          "Helvetica Neue",
+          Arial;
+        color: #0f172a;
+        background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
+      }
+      body {
+        margin: 0;
+        padding: 32px;
+        line-height: 1.45;
+      }
+      header {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+      }
+      .logo {
+        width: 72px;
+        height: 72px;
+        border-radius: 12px;
+        background: linear-gradient(
+          135deg,
+          var(--deep-blue),
+          var(--mint-green)
+        );
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: white;
+        font-weight: 800;
+        font-size: 20px;
+      }
+      h1 {
+        margin: 0.1rem 0 0;
+        font-size: 20px;
+      }
+      p.lead {
+        margin: 8px 0 24px;
+        color: var(--muted);
+      }
+      main {
+        max-width: 980px;
+      }
+      section {
+        background: white;
+        border-radius: 12px;
+        padding: 18px;
+        margin-bottom: 14px;
+        box-shadow: 0 6px 18px rgba(10, 20, 40, 0.06);
+      }
+      h2 {
+        margin: 0 0 10px;
+        font-size: 16px;
+      }
+      .columns {
+        display: grid;
+        grid-template-columns: 1fr 320px;
+        gap: 16px;
+      }
+      .chip {
+        display: inline-block;
+        padding: 6px 10px;
+        border-radius: 999px;
+        background: var(--warm-neutral);
+        font-size: 13px;
+        margin-right: 8px;
+      }
+      ul {
+        padding-left: 18px;
+      }
+      pre {
+        background: #0b1220;
+        color: #d1e8ff;
+        padding: 14px;
+        border-radius: 8px;
+        overflow: auto;
+      }
+      .code-card {
+        font-family: monospace;
+        font-size: 13px;
+        background: #f8fafc;
+        padding: 12px;
+        border-radius: 8px;
+      }
+      footer {
+        margin-top: 18px;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      .palette {
+        display: flex;
+        gap: 8px;
+        align-items: center;
+      }
+      .swatch {
+        width: 46px;
+        height: 32px;
+        border-radius: 6px;
+        box-shadow: inset 0 -2px 6px rgba(0, 0, 0, 0.06);
+      }
+      .muted {
+        color: var(--muted);
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+      }
+      th,
+      td {
+        padding: 8px;
+        border-bottom: 1px solid #eef2f7;
+        text-align: left;
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="logo">LF</div>
+      <div>
+        <h1>Local‑First Expense Tracker — Concept Reference</h1>
+        <p class="lead">
+          A concise single‑file reference: branding, features, UX, tech stack,
+          sync approach, schema, and roadmap — saved for future work.
+        </p>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <h2>Branding</h2>
+        <div
+          style="
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+          "
+        >
+          <div style="flex: 1">
+            <p>
+              <strong>Name ideas</strong>: Ledge, Minty, Pondo, PesoPad,
+              CacheFlow, Tab, Kurso
+            </p>
+            <p><strong>Tone</strong>: Simple · Stable · Privacy‑first</p>
+          </div>
+          <div style="width: 220px">
+            <div class="palette">
+              <div class="swatch" style="background: var(--deep-blue)"></div>
+              <div class="swatch" style="background: var(--mint-green)"></div>
+              <div class="swatch" style="background: var(--warm-neutral)"></div>
+            </div>
+            <p style="margin: 8px 0 0; font-size: 13px" class="muted">
+              Heading: Poppins / Body: Inter
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section>
+        <h2>Core Concept</h2>
+        <ul>
+          <li>App works 100% offline — SQLite is the primary local store.</li>
+          <li>
+            Syncs automatically when online with conflict resolution (last‑write
+            or CRDT for advanced).
+          </li>
+          <li>Privacy‑first: local encryption, optional cloud backup.</li>
+          <li>
+            Target: people with intermittent internet and small business owners.
+          </li>
+        </ul>
+      </section>
+
+      <section class="columns">
+        <div>
+          <h2>Features</h2>
+          <h3 style="font-size: 14px; margin-top: 8px">MVP</h3>
+          <ul>
+            <li>
+              Local add/edit/delete transactions (amount, category, wallet,
+              notes).
+            </li>
+            <li>Daily / monthly views and simple analytics.</li>
+            <li>Background sync + queued ops.</li>
+            <li>PIN / biometric lock and encrypted local keys.</li>
+          </ul>
+
+          <h3 style="font-size: 14px; margin-top: 8px">Phase 2</h3>
+          <ul>
+            <li>
+              Recurring transactions, budgets, receipt photos, CSV export,
+              multiple wallets.
+            </li>
+          </ul>
+
+          <h3 style="font-size: 14px; margin-top: 8px">Future / Power</h3>
+          <ul>
+            <li>
+              AI categorization, shared wallets, subscription parsing, CRDT full
+              sync.
+            </li>
+          </ul>
+        </div>
+
+        <aside style="min-width: 260px">
+          <h2>UX Highlights</h2>
+          <p class="muted">Simple flows, fast quick‑add, minimal fields.</p>
+          <ul>
+            <li>Home: today total, quick add, recent tx.</li>
+            <li>Add: amount (numpad) → category → wallet → save.</li>
+            <li>Analytics: pie (category), trend (monthly), largest spends.</li>
+          </ul>
+
+          <h2 style="margin-top: 12px">Security</h2>
+          <ul>
+            <li>Encrypt sensitive data, use SecureStore for keys.</li>
+            <li>App lock (PIN / biometrics).</li>
+          </ul>
+        </aside>
+      </section>
+
+      <section>
+        <h2>Tech Stack</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Layer</th>
+              <th>Recommendation</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Frontend</td>
+              <td>React Native (Expo), Zustand or Jotai for state</td>
+            </tr>
+            <tr>
+              <td>Local DB</td>
+              <td>SQLite (expo-sqlite) + Drizzle ORM (optional)</td>
+            </tr>
+            <tr>
+              <td>Networking</td>
+              <td>React Query or custom sync engine, queueing offline ops</td>
+            </tr>
+            <tr>
+              <td>Backend</td>
+              <td>Supabase (fast) or custom Express + Postgres (control)</td>
+            </tr>
+            <tr>
+              <td>Storage/Backup</td>
+              <td>Supabase Storage / encrypted JSON exports</td>
+            </tr>
+            <tr>
+              <td>Auth</td>
+              <td>Supabase Auth or email+PIN locally (optional)</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Sync Approach (Simple)</h2>
+        <div class="code-card">
+          <strong>Flow</strong>
+          <pre>
+1. Client records tx locally with updatedAt timestamp and a UUID.
+2. When online, client sends all local records changed since lastSync to API.
+3. Server merges (last-write-wins by timestamp) and returns authoritative rows.
+4. Client applies server rows to local DB and marks synced.
+        </pre
+          >
+        </div>
+
+        <p class="muted">
+          Advanced: use CRDTs (e.g., Automerge) or vector clocks for stronger
+          conflict handling.
+        </p>
+      </section>
+
+      <section>
+        <h2>Database Schema (example)</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Table</th>
+              <th>Columns (key)</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>transactions</td>
+              <td>
+                id(uuid), userId, type, category, amount, walletId, note,
+                createdAt, updatedAt, deletedAt
+              </td>
+            </tr>
+            <tr>
+              <td>wallets</td>
+              <td>id, name, initialBalance, createdAt, updatedAt</td>
+            </tr>
+            <tr>
+              <td>sync_meta</td>
+              <td>lastSyncAt, deviceId, pendingOps (queue)</td>
+            </tr>
+          </tbody>
+        </table>
+      </section>
+
+      <section>
+        <h2>Architecture (summary)</h2>
+        <pre>
+[React Native App]
+   ├─ Local SQLite (primary source)
+   ├─ Sync Engine (queue, network detection)
+   └─ Sync → [Supabase or Express/Postgres]
+         ├─ Auth
+         └─ Merge endpoints / backups
+      </pre
+        >
+      </section>
+
+      <section>
+        <h2>Roadmap / Checklist</h2>
+        <ol>
+          <li>Branding + wireframes</li>
+          <li>Local DB schema + add/list/edit/delete</li>
+          <li>Quick add + clean UI</li>
+          <li>Sync engine basics (queue + lastWriteWins)</li>
+          <li>Security: encrypt keys + app lock</li>
+          <li>Exports + backups</li>
+          <li>Polish + analytics + launch</li>
+        </ol>
+      </section>
+
+      <section>
+        <h2>Developer Notes & Tips</h2>
+        <ul>
+          <li>
+            Keep local DB as the source of truth — UI reads directly from it.
+          </li>
+          <li>Implement an idempotent sync API so retries are safe.</li>
+          <li>
+            Use small JSON diffs for sync payloads (send only changed rows).
+          </li>
+          <li>
+            Test offline → online heavily on real devices (Philippines network
+            patterns included).
+          </li>
+        </ul>
+      </section>
+
+      <footer>
+        <p>
+          Saved reference — use this file as your single‑page spec while you
+          build. Update as you iterate.
+        </p>
+      </footer>
+    </main>
+  </body>
+</html>
